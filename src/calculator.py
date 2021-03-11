@@ -17,11 +17,21 @@ Hints:
 Task 3.1: Push your branch to the remote repository
 Task 3.2: Setup a Merge Request and assign it to your supervisor
 '''
+from typing import Iterable, Union
 
 
 # this is an example
-def add(a, b):
-    return a+b
+# def add(a, b):
+#     return a+b
 
+def add(summands: Iterable[Union[float, int]]) -> Union[float, int]:
+    return sum(summands)
 
-# add your code here
+def div(divident: Union[float, int], divisor: Union[float, int]) -> Union[int, float]:
+    if divisor == 0:
+        raise ValueError
+    return divident / divisor
+
+def sub(a, b):
+    return a - b
+
