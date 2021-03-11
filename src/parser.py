@@ -1,33 +1,36 @@
-# generally just google python 3 <what i want to do>, works mostly
-# specifically look at https://docs.python.org/3/library/functions.html
-
+import argparse
 import os
 import sys
+from pathlib import Path
 
-fd = open(sys.argv[1], 'r')  # TODO use pathlib here, TODO use argparse for sys.argv
-data = fd.read()
-fd.close()
+def parse_row(csv_row, delim_char=','):
+    return [value.strip() for value in csv_row.split(delim_char)]
 
-csv_data = dict()
+def get_row_format(index: int, row_values: list, header: list) -> str:
+    field_value_pairs = "\t".join([f"{field}: {value}" for field, value in  zip(header, row_values)])
+    return f"{index}\t{field_value_pairs}"
 
-counter = 0  # TODO find built-in to not have to count
-for line in data.splitlines(keepends=False):
-    values = line.split(',')
-    for value in values:  # TODO I can do this in one line, don't I (list comprehension)
-        values[values.index(value)] = value.strip()
-    csv_data[counter] = values
-    counter += 1
+def main(args):
+    try:
+        with open(args.file, 'r') as f:
+            csv_rows = f.readlines()
+    except FileNotFoundError:
+        print("File not found")
+        return 1
+    except IsADirectoryError:
+        print("File is a directory")
+        return 2
 
-if not csv_data:  # TODO Earlier point might need exit too ...
-    print('Empty file')
-    sys.exit(1)
+    parsed_rows = list(map(parse_row, csv_rows))
+    header = parsed_rows.pop(0)
+    for index, row_values in enumerate(parsed_rows):
+        print(get_row_format(index, row_values, header))
 
-
-header = csv_data.pop(0)
-format_string = '{}\t'  # TODO Again, maybe one liner?? (str.join, list comprehension)
-for header_name in header:
-    format_string += '{}: {{}}\t\t'.format(header_name)
-
-for line_number, values in csv_data.items():
-    print(format_string.format(line_number, *values))
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description='Process some integers.')
+    parser.add_argument('file',
+                        type=Path,
+                        help='path to CSV file')
+    args = parser.parse_args()
+    sys.exit(main(args))
 
