@@ -1,7 +1,7 @@
 '''
 Clean Code 101 calculator hands on
 
-Task 0: Create a branch and switch to it
+Task 0: Create a branch and switch to it - done
 
 Task 1: Add and test a "devide(a, b)" (a/b) function
 Hints:
@@ -25,3 +25,6 @@ def add(a, b):
 
 
 # add your code here
+
+def divide(a, b):
+    return a/b
