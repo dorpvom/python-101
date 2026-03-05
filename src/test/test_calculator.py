@@ -3,7 +3,7 @@ This is the calculator test file
 """
 
 from calculator import add
-
+from calculator import division
 
 # this is an example
 def test_add():
@@ -12,3 +12,5 @@ def test_add():
 
 
 # add your tests here
+def test_division():
+    assert division(4,2) == 2, "result not correct"
